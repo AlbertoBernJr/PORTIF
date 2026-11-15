@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfólio · Projetos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b1120;
+            --bg-soft: #0f172a;
+            --sidebar-bg: rgba(15, 23, 42, 0.85);
+            --accent: #38bdf8;
+            --accent-2: #818cf8;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+            --card-bg: rgba(30, 41, 59, 0.6);
+            --hover: #334155;
+            --border: rgba(148, 163, 184, 0.12);
+            --border-strong: rgba(148, 163, 184, 0.2);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.25);
+            --shadow-glow: 0 0 0 1px rgba(56,189,248,0.3), 0 8px 24px rgba(56,189,248,0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            position: relative;
+        }
+
+        /* Fundo com gradientes suaves */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 600px 400px at 20% -10%, rgba(56,189,248,0.12), transparent 60%),
+                radial-gradient(ellipse 500px 400px at 100% 100%, rgba(129,140,248,0.10), transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        body > * { position: relative; z-index: 1; }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.2); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(148,163,184,0.35); }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 300px;
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 24px 18px;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .avatar {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            display: grid; place-items: center;
+            font-weight: 700; font-size: 1rem; color: #0b1120;
+            box-shadow: 0 0 0 3px rgba(56,189,248,0.15);
+            flex-shrink: 0;
+        }
+
+        .brand-info { min-width: 0; }
+        .brand-name { font-size: 0.95rem; font-weight: 600; letter-spacing: -0.01em; }
+        .brand-role { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+
+        .section-label {
+            font-size: 0.7rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.08em;
+            color: var(--text-dim); margin-bottom: 12px; padding-left: 4px;
+        }
+
+        .project-nav {
+            list-style: none;
+            display: flex; flex-direction: column;
+            gap: 8px; flex: 1;
+        }
+        .project-nav li { position: relative; }
+
+        .project-nav button, .project-nav a {
+            display: block; width: 100%;
+            text-align: left;
+            padding: 12px 14px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: inherit; font-family: inherit; font-size: inherit;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative; overflow: hidden;
+            text-decoration: none;
+        }
+
+        .project-nav button::before, .project-nav a::before {
+            content: '';
+            position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+            background: var(--accent);
+            transform: scaleY(0);
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .project-nav button:hover, .project-nav a:hover {
+            background: rgba(51, 65, 85, 0.7);
+            border-color: var(--border-strong);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .project-nav button:hover::before, .project-nav a:hover::before,
+        .project-nav button.active::before, .project-nav a.active::before {
+            transform: scaleY(1);
+        }
+
+        .project-nav button.active, .project-nav a.active {
+            background: linear-gradient(135deg, rgba(56,189,248,0.12), rgba(129,140,248,0.08));
+            border-color: rgba(56,189,248,0.35);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .project-nav button:focus-visible, .project-nav a:focus-visible {
+            outline: 2px solid var(--accent); outline-offset: 2px;
+        }
+
+        .project-header {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 4px;
+        }
+
+        .project-icon {
+            width: 22px; height: 22px;
+            display: grid; place-items: center;
+            font-size: 0.9rem; flex-shrink: 0;
+            filter: grayscale(0.2);
+        }
+
+        .project-name {
+            font-size: 0.88rem; font-weight: 600;
+            letter-spacing: -0.01em; line-height: 1.3;
+        }
+        .project-nav button.active .project-name, .project-nav a.active .project-name {
+            color: var(--accent);
+        }
+
+        .project-desc {
+            display: block; font-size: 0.75rem;
+            color: var(--text-muted); line-height: 1.4;
+            margin-left: 32px; margin-top: 2px;
+        }
+
+        .project-tags {
+            display: flex; flex-wrap: wrap; gap: 4px;
+            margin-left: 32px; margin-top: 8px;
+        }
+        .tag {
+            font-size: 0.65rem; padding: 2px 7px; border-radius: 999px;
+            background: rgba(56,189,248,0.1); color: var(--accent);
+            border: 1px solid rgba(56,189,248,0.2);
+            font-weight: 500; letter-spacing: 0.01em;
+        }
+
+        .sidebar-footer {
+            margin-top: 20px; padding-top: 16px;
+            border-top: 1px solid var(--border);
+            display: flex; gap: 8px;
+        }
+        .social-link {
+            width: 34px; height: 34px; border-radius: var(--radius-sm);
+            display: grid; place-items: center;
+            background: var(--card-bg); border: 1px solid var(--border);
+            color: var(--text-muted);
+            transition: all 0.2s; text-decoration: none;
+        }
+        .social-link:hover {
+            background: var(--hover); color: var(--accent);
+            border-color: rgba(56,189,248,0.3); transform: translateY(-2px);
+        }
+        .social-link svg { width: 16px; height: 16px; }
+
+        /* ===== CONTEÚDO PRINCIPAL ===== */
+        .main-content {
+            flex: 1; display: flex; flex-direction: column;
+            padding: 24px; gap: 16px;
+            overflow: hidden; min-width: 0;
+        }
+
+        .project-title-bar {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 18px 22px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            position: relative; overflow: hidden;
+        }
+        .project-title-bar::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(56,189,248,0.6), transparent);
+        }
+
+        .title-row {
+            display: flex; align-items: flex-start;
+            justify-content: space-between; gap: 16px;
+        }
+        .title-info { min-width: 0; flex: 1; }
+
+        .project-title-bar h1 {
+            font-size: 1.45rem; margin-bottom: 6px;
+            font-weight: 700; letter-spacing: -0.02em; line-height: 1.25;
+        }
+        .project-title-bar p {
+            color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;
+        }
+
+        .title-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 14px; border-radius: var(--radius-sm);
+            background: rgba(51, 65, 85, 0.6); color: var(--text);
+            text-decoration: none; font-size: 0.82rem; font-weight: 500;
+            border: 1px solid var(--border-strong);
+            transition: all 0.2s; cursor: pointer;
+            font-family: inherit; white-space: nowrap;
+        }
+        .btn:hover {
+            background: rgba(56,189,248,0.15);
+            border-color: rgba(56,189,248,0.4);
+            color: var(--accent);
+        }
+        .btn svg { width: 14px; height: 14px; }
+
+        .preview-frame {
+            flex: 1; border: 1px solid var(--border);
+            border-radius: var(--radius-lg); overflow: hidden;
+            background: #fff; min-height: 0; position: relative;
+            box-shadow: var(--shadow-md);
+        }
+        .preview-frame iframe {
+            width: 100%; height: 100%; border: none; display: block;
+        }
+
+        .loader {
+            position: absolute; inset: 0;
+            display: grid; place-items: center;
+            background: rgba(11, 17, 32, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 2; transition: opacity 0.3s;
+        }
+        .loader[hidden] { display: none; }
+
+        .spinner {
+            width: 40px; height: 40px; border-radius: 50%;
+            border: 3px solid rgba(56,189,248,0.2);
+            border-top-color: var(--accent);
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .empty-state {
+            position: absolute; inset: 0;
+            display: grid; place-content: center; text-align: center;
+            padding: 24px; background: var(--bg-soft);
+            color: var(--text-muted); z-index: 3;
+        }
+        .empty-state svg {
+            width: 48px; height: 48px; margin: 0 auto 16px;
+            color: var(--text-dim); opacity: 0.5;
+        }
+        .empty-state h3 { color: var(--text); font-size: 1.1rem; margin-bottom: 6px; }
+        .empty-state p { font-size: 0.88rem; }
+
+        /* ===== RESPONSIVO ===== */
+        @media (max-width: 900px) {
+            body { flex-direction: column; }
+
+            .sidebar {
+                width: 100%; padding: 14px;
+                border-right: none; border-bottom: 1px solid var(--border);
+                backdrop-filter: none; max-height: 45vh;
+            }
+            .brand { margin-bottom: 14px; padding-bottom: 14px; }
+            .avatar { width: 36px; height: 36px; font-size: 0.85rem; }
+            .brand-name { font-size: 0.88rem; }
+            .brand-role { font-size: 0.72rem; }
+            .section-label { display: none; }
+
+            .project-nav {
+                flex-direction: row; overflow-x: auto; gap: 8px; padding-bottom: 4px;
+            }
+            .project-nav li { flex: 0 0 auto; }
+            .project-nav button, .project-nav a {
+                white-space: nowrap; padding: 10px 12px; min-width: 160px;
+            }
+            .project-nav button::before, .project-nav a::before {
+                width: 100%; height: 2px; top: auto; bottom: 0;
+                transform: scaleX(0);
+            }
+            .project-nav button:hover::before, .project-nav a:hover::before,
+            .project-nav button.active::before, .project-nav a.active::before {
+                transform: scaleX(1);
+            }
+            .project-nav button:hover, .project-nav a:hover { transform: none; }
+
+            .project-desc, .project-tags, .sidebar-footer { display: none; }
+
+            .main-content { padding: 14px; gap: 12px; }
+            .project-title-bar { padding: 14px 16px; }
+            .title-row { flex-direction: column; gap: 12px; }
+            .project-title-bar h1 { font-size: 1.15rem; }
+            .project-title-bar p { font-size: 0.82rem; }
+            .title-actions { width: 100%; }
+            .btn { flex: 1; justify-content: center; }
+        }
+        @media (max-width: 480px) {
+            .brand-role { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="avatar" aria-hidden="true">JS</div>
+            <div class="brand-info">
+                <div class="brand-name">Seu Nome</div>
+                <div class="brand-role">Dev · Automações & Web</div>
+            </div>
+        </div>
+
+        <div class="section-label">Projetos</div>
+        <ul class="project-nav" id="projectNav"></ul>
+
+        <div class="sidebar-footer">
+            <a class="social-link" href="https://github.com/seu-usuario" target="_blank" rel="noopener" aria-label="GitHub">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 2.9-.39c.98 0 1.97.13 2.9.39 2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14 0 1.55-.01 2.8-.01 3.18 0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+            </a>
+            <a class="social-link" href="https://linkedin.com/in/seu-usuario" target="_blank" rel="noopener" aria-label="LinkedIn">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+            </a>
+            <a class="social-link" href="mailto:seu@email.com" aria-label="Email">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="project-title-bar">
+            <div class="title-row">
+                <div class="title-info">
+                    <h1 id="projectTitle" aria-live="polite">Selecione um projeto</h1>
+                    <p id="projectDescription">Clique em um projeto da lista para visualizar a prévia.</p>
+                </div>
+                <div class="title-actions">
+                    <a id="openNewTab" class="btn" href="#" target="_blank" rel="noopener noreferrer" hidden>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M21 14v7H3V3h7"/></svg>
+                        Abrir em nova aba
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="preview-frame">
+            <div class="loader" id="loader" hidden><span class="spinner"></span></div>
+            <div class="empty-state" id="emptyState">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 8h20"/><circle cx="5.5" cy="6" r=".5" fill="currentColor"/><circle cx="7.5" cy="6" r=".5" fill="currentColor"/></svg>
+                <h3>Prévia do projeto</h3>
+                <p>Selecione um projeto na barra lateral para começar.</p>
+            </div>
+            <iframe id="previewIframe" title="Prévia do projeto" src="about:blank"></iframe>
+        </div>
+    </main>
+
+    <script>
+        // =============================================
+        // 🗂️ ADICIONE SEUS PROJETOS AQUI
+        // =============================================
+        // Campos opcionais: icon (emoji), tech (array), repo (URL)
+        const projects = [
+            {
+                id: 'marketplace',
+                name: 'Identificação Marketplace',
+                description: 'Automação híbrida (Python + JavaScript) para identificação de produtos.',
+                folder: 'IIDENTIFICACAO_MARKETPLACE',
+                icon: '🛒',
+                tech: ['Python', 'JavaScript']
+            },
+            {
+                id: 'appscript-faltas',
+                name: 'Lançamento de Faltas',
+                description: 'Automação sobre o registro de faltas dos alunos.',
+                folder: 'WEB APP SCRIPT - LANCAMENTO FALTA DOS ALUNOS',
+                icon: '📋',
+                tech: ['Apps Script']
+            },
+            {
+                id: 'cartoes-avaliacao',
+                name: 'Cartões de Avaliação',
+                description: 'Sistema automatizado para geração de cartões de avaliação nominal.',
+                folder: 'CRIACAO CARTOES AVALICAO NOMINAL',
+                icon: '🎴',
+                tech: ['Automação']
+            },
+            {
+                id: 'acompanhar-atualizacao',
+                name: 'Acompanhar Atualização',
+                description: 'Notificação e controle de pendências para documentos educacionais.',
+                folder: 'ACOMPANHAR_ATUALIZACAO_DE_ARQUIVOS',
+                icon: '🔔',
+                tech: ['Google Sheets']
+            }
+        ];
+
+        const nav     = document.getElementById('projectNav');
+        const iframe  = document.getElementById('previewIframe');
+        const titleEl = document.getElementById('projectTitle');
+        const descEl  = document.getElementById('projectDescription');
+        const openBtn = document.getElementById('openNewTab');
+        const loader  = document.getElementById('loader');
+        const empty   = document.getElementById('emptyState');
+
+        const byId = new Map(projects.map(p => [p.id, p]));
+        let current = null;
+
+        function urlOf(p) {
+            if (/^https?:\/\//i.test(p.folder)) return p.folder;
+            const path = p.folder.split('/').map(encodeURIComponent).join('/');
+            return './' + path + '/';
+        }
+
+        function renderNav() {
+            const frag = document.createDocumentFragment();
+
+            for (const p of projects) {
+                const li = document.createElement('li');
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.dataset.id = p.id;
+
+                const header = document.createElement('div');
+                header.className = 'project-header';
+
+                if (p.icon) {
+                    const icon = document.createElement('span');
+                    icon.className = 'project-icon';
+                    icon.textContent = p.icon;
+                    icon.setAttribute('aria-hidden', 'true');
+                    header.append(icon);
+                }
+
+                const name = document.createElement('span');
+                name.className = 'project-name';
+                name.textContent = p.name;
+                header.append(name);
+
+                const desc = document.createElement('span');
+                desc.className = 'project-desc';
+                desc.textContent = p.description;
+
+                btn.append(header, desc);
+
+                if (p.tech && p.tech.length) {
+                    const tags = document.createElement('div');
+                    tags.className = 'project-tags';
+                    for (const t of p.tech) {
+                        const tag = document.createElement('span');
+                        tag.className = 'tag';
+                        tag.textContent = t;
+                        tags.append(tag);
+                    }
+                    btn.append(tags);
+                }
+
+                btn.addEventListener('click', () => {
+                    history.replaceState(null, '', '#' + p.id);
+                    loadProject(p);
+                });
+
+                li.append(btn);
+                frag.append(li);
+            }
+            nav.append(frag);
+        }
+
+        function setActive(id) {
+            for (const btn of nav.querySelectorAll('button')) {
+                const on = btn.dataset.id === id;
+                btn.classList.toggle('active', on);
+                if (on) btn.setAttribute('aria-current', 'true');
+                else btn.removeAttribute('aria-current');
+            }
+        }
+
+        function loadProject(p) {
+            current = p;
+            titleEl.textContent = p.name;
+            descEl.textContent = p.description;
+            openBtn.href = urlOf(p);
+            openBtn.hidden = false;
+            empty.hidden = true;
+            loader.hidden = false;
+            setActive(p.id);
+            iframe.src = urlOf(p);
+        }
+
+        iframe.addEventListener('load', () => {
+            if (!current) return;
+            loader.hidden = true;
+        });
+
+        renderNav();
+        if (projects.length) {
+            const hash = location.hash.replace(/^#/, '');
+            loadProject(byId.get(hash) || projects[0]);
+        } else {
+            empty.hidden = false;
+            loader.hidden = true;
+        }
+    </script>
+</body>
+</html>
