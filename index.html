@@ -545,10 +545,6 @@
         // =============================================
         // 🗂️ PROJETOS
         // =============================================
-        // video:      URL do YouTube/Vimeo ou caminho .mp4
-        // details:    texto longo "Sobre o projeto"
-        // highlights: lista de destaques
-        // repo:       URL do repositório
         const projects = [
             {
                 id: 'marketplace',
@@ -571,41 +567,63 @@
             {
                 id: 'appscript-faltas',
                 name: 'Lançamento de Faltas',
-                description: 'Automação sobre o registro de faltas dos alunos.',
+                description: 'Aplicativo web para registro de faltas com integração ao Google Sheets.',
                 folder: 'https://albertobernjr.github.io/GCP-GAS/WEB APP SCRIPT - LANCAMENTO FALTA DOS ALUNOS/',
                 icon: '📋',
-                tech: ['Apps Script'],
+                tech: ['JavaScript', 'Apps Script', 'Google Sheets', 'HTML/CSS'],
                 video: '',
-                details: '',
-                highlights: [],
-                repo: ''
+                details: 'Aplicativo web desenvolvido com Google Apps Script para automatizar o lançamento de faltas de alunos, oferecendo interface amigável, filtros e gravação direta em planilha Google. Elimina a necessidade de preenchimento manual e reduz erros.',
+                highlights: [
+                    'Verificação de permissões de acesso',
+                    'Interface de seleção de alunos',
+                    'Aplicação de filtros dinâmicos',
+                    'Marcação de faltas com um clique',
+                    'Atualização automática da planilha',
+                    'Contador de faltas por aluno'
+                ],
+                repo: 'https://github.com/AlbertoBernJr/GCP-GAS/tree/main/WEB APP SCRIPT - LANCAMENTO FALTA DOS ALUNOS'
             },
             {
                 id: 'cartoes-avaliacao',
-                name: 'Cartões de Avaliação',
+                name: 'Cartões de Avaliação Nominal',
                 description: 'Sistema automatizado para geração de cartões de avaliação nominal.',
                 folder: 'https://albertobernjr.github.io/GCP-GAS/CRIACAO CARTOES AVALICAO NOMINAL/',
                 icon: '🎴',
-                tech: ['Automação'],
+                tech: ['Excel', 'Pillow (PIL)', 'Pandas', 'PDF', 'Numpy', 'Tkinter'],
                 video: '',
-                details: '',
-                highlights: [],
-                repo: ''
+                details: 'Ferramenta que automatiza a criação de cartões de avaliação nominal, integrando dados do Microsoft Excel e gerando documentos prontos para impressão ou envio digital. Reduz drasticamente o tempo de produção manual e elimina erros de digitação.',
+                highlights: [
+                    'Leitura automática de dados do Excel',
+                    'Geração em massa de cartões personalizados',
+                    'Formatação profissional com layout definido',
+                    'Exportação para PDF',
+                    'Interface simples para configuração'
+                ],
+                repo: 'https://github.com/AlbertoBernJr/GCP-GAS/tree/main/CRIACAO CARTOES AVALICAO NOMINAL'
             },
             {
                 id: 'acompanhar-atualizacao',
-                name: 'Acompanhar Atualização',
-                description: 'Notificação e controle de pendências para documentos educacionais.',
+                name: 'Acompanhar Atualização no Sheets',
+                description: 'Sistema de notificação e controle de pendências para documentos educacionais.',
                 folder: 'https://albertobernjr.github.io/GCP-GAS/ACOMPANHAR_ATUALIZACAO_DE_ARQUIVOS/',
                 icon: '🔔',
-                tech: ['Google Sheets'],
+                tech: ['Google Sheets', 'Apps Script', 'Gmail API', 'LockService', 'PropertiesService'],
                 video: '',
-                details: '',
-                highlights: [],
-                repo: ''
+                details: 'Automação desenvolvida em Google Apps Script para monitorar edições em uma planilha compartilhada, usada pela coordenação pedagógica para registrar documentos de desempenho de alunos. O script detecta alterações na coluna de arquivos, gera notificações por e-mail e mantém um controle visual de pendências por meio de checkboxes e cores nas abas.',
+                highlights: [
+                    'Detecção automática de edições na coluna E',
+                    'Registro de data/hora da última modificação',
+                    'Criação de checkbox para controle de conferência',
+                    'Mudança de cor da aba para indicar pendências',
+                    'Envio de e-mail com detalhes da edição',
+                    'Proteção contra concorrência e recursividade (LockService + PropertiesService)',
+                    'Gatilho instalável com credenciais de administrador'
+                ],
+                repo: 'https://github.com/AlbertoBernJr/GCP-GAS/tree/main/ACOMPANHAR_ATUALIZACAO_DE_ARQUIVOS'
             }
         ];
 
+        // (O restante do JavaScript permanece idêntico ao da versão anterior)
         const nav        = document.getElementById('projectNav');
         const iframe     = document.getElementById('previewIframe');
         const titleEl    = document.getElementById('projectTitle');
@@ -626,7 +644,6 @@
             return './' + path + '/';
         }
 
-        // ===== VÍDEO =====
         function videoEmbed(url) {
             if (!url) return null;
             const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/);
@@ -659,7 +676,6 @@
             videoPanel.append(wrap);
         }
 
-        // ===== DETALHES =====
         function renderDetailsTab(p) {
             detailsEl.innerHTML = '';
             const has = p.details || (p.highlights && p.highlights.length) || p.repo;
@@ -695,7 +711,6 @@
             detailsEl.append(div);
         }
 
-        // ===== ABAS =====
         function renderTabs(p) {
             tabsEl.innerHTML = '';
             const defs = [
@@ -724,7 +739,6 @@
             }
         }
 
-        // ===== CARREGAR PROJETO =====
         function loadProject(p) {
             current = p;
             titleEl.textContent = p.name;
@@ -756,7 +770,6 @@
             if (current) loader.hidden = true;
         });
 
-        // ===== SIDEBAR =====
         function renderNav() {
             const frag = document.createDocumentFragment();
 
@@ -811,7 +824,6 @@
             nav.append(frag);
         }
 
-        // ===== INIT =====
         renderNav();
         if (projects.length) {
             const hash = location.hash.replace(/^#/, '');
