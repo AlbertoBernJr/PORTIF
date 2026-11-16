@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfólio · Projetos</title>
+    <title>Portfólio · Alberto Bern Jr</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -31,6 +31,7 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { height: 100%; }
+        [hidden] { display: none !important; }
 
         body {
             font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -79,7 +80,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 28px;
+            margin-bottom: 20px;
             padding-bottom: 20px;
             border-bottom: 1px solid var(--border);
         }
@@ -97,6 +98,64 @@
         .brand-info { min-width: 0; }
         .brand-name { font-size: 0.95rem; font-weight: 600; letter-spacing: -0.01em; }
         .brand-role { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+
+        /* ===== BOTÃO SOBRE MIM ===== */
+        .about-nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, rgba(56,189,248,0.12), rgba(129,140,248,0.08));
+            border: 1px solid rgba(56,189,248,0.25);
+            border-radius: var(--radius-md);
+            color: var(--text);
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-nav:hover {
+            border-color: rgba(56,189,248,0.5);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .about-nav:focus-visible {
+            outline: 2px solid var(--accent); outline-offset: 2px;
+        }
+
+        .about-nav.active {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .about-nav-icon {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            display: grid; place-items: center;
+            background: rgba(56,189,248,0.15);
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .about-nav-text { min-width: 0; flex: 1; }
+
+        .about-nav-title {
+            font-size: 0.88rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        .about-nav-sub {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
 
         .section-label {
             font-size: 0.7rem; font-weight: 600;
@@ -395,7 +454,7 @@
             margin-top: 8px;
         }
 
-        /* ===== ABA IMAGENS (carrossel) ===== */
+        /* ===== ABA IMAGENS ===== */
         .gallery {
             position: relative;
             width: 100%;
@@ -520,7 +579,6 @@
             color: var(--text-muted);
             z-index: 3;
         }
-        .empty-state[hidden] { display: none; }
         .empty-state.inline { position: static; min-height: 100%; }
         .empty-state svg {
             width: 48px; height: 48px; margin: 0 auto 16px;
@@ -528,6 +586,172 @@
         }
         .empty-state h3 { color: var(--text); font-size: 1.1rem; margin-bottom: 6px; }
         .empty-state p { font-size: 0.88rem; }
+
+        /* ===== PAINEL SOBRE MIM ===== */
+        .about-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow-y: auto;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: var(--shadow-md);
+            position: relative;
+            min-height: 0;
+        }
+
+        .about-hero {
+            padding: 40px 40px 32px;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            background:
+                radial-gradient(ellipse 400px 200px at 0% 0%, rgba(56,189,248,0.10), transparent 60%),
+                radial-gradient(ellipse 400px 200px at 100% 100%, rgba(129,140,248,0.08), transparent 60%);
+        }
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(56,189,248,0.6), transparent);
+        }
+
+        .about-hero-content {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .about-avatar {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            display: grid;
+            place-items: center;
+            font-weight: 700;
+            font-size: 1.9rem;
+            color: #0b1120;
+            box-shadow: 0 0 0 4px rgba(56,189,248,0.15), var(--shadow-md);
+            flex-shrink: 0;
+            letter-spacing: -0.02em;
+        }
+
+        .about-name {
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+            line-height: 1.15;
+        }
+
+        .about-role {
+            font-size: 1rem;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .about-body {
+            padding: 32px 40px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .about-section h3 {
+            color: var(--accent);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 14px;
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .about-section p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .about-section p + p { margin-top: 12px; }
+
+        .about-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 4px;
+        }
+
+        .about-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .about-link:hover {
+            background: rgba(56,189,248,0.08);
+            border-color: rgba(56,189,248,0.35);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .about-link:focus-visible {
+            outline: 2px solid var(--accent); outline-offset: 2px;
+        }
+
+        .about-link-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            background: rgba(56,189,248,0.1);
+            color: var(--accent);
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .about-link:hover .about-link-icon {
+            background: rgba(56,189,248,0.2);
+        }
+
+        .about-link-icon svg { width: 20px; height: 20px; }
+
+        .about-link-text {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            min-width: 0;
+        }
+
+        .about-link-label {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 600;
+        }
+
+        .about-link-value {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
 
         /* ===== RESPONSIVO ===== */
         @media (max-width: 900px) {
@@ -538,11 +762,23 @@
                 border-right: none; border-bottom: 1px solid var(--border);
                 backdrop-filter: none; max-height: 45vh;
             }
-            .brand { margin-bottom: 14px; padding-bottom: 14px; }
+            .brand { margin-bottom: 12px; padding-bottom: 12px; }
             .avatar { width: 36px; height: 36px; font-size: 0.85rem; }
             .brand-name { font-size: 0.88rem; }
             .brand-role { font-size: 0.72rem; }
             .section-label { display: none; }
+
+            .about-nav {
+                padding: 10px 12px;
+                margin-bottom: 12px;
+            }
+            .about-nav-icon {
+                width: 30px;
+                height: 30px;
+                font-size: 0.95rem;
+            }
+            .about-nav-title { font-size: 0.82rem; }
+            .about-nav-sub { font-size: 0.68rem; }
 
             .project-nav {
                 flex-direction: row; overflow-x: auto; gap: 8px; padding-bottom: 4px;
@@ -579,6 +815,14 @@
             .gallery-btn.prev { left: 8px; }
             .gallery-btn.next { right: 8px; }
             .gallery-counter { top: 10px; right: 10px; font-size: 0.7rem; padding: 4px 10px; }
+
+            .about-hero { padding: 28px 20px 24px; }
+            .about-hero-content { gap: 16px; }
+            .about-avatar { width: 64px; height: 64px; font-size: 1.4rem; }
+            .about-name { font-size: 1.35rem; }
+            .about-role { font-size: 0.88rem; }
+            .about-body { padding: 24px 20px 32px; gap: 24px; }
+            .about-links { grid-template-columns: 1fr; }
         }
         @media (max-width: 480px) {
             .brand-role { display: none; }
@@ -594,6 +838,14 @@
                 <div class="brand-role">Dev · Automações & Web</div>
             </div>
         </div>
+
+        <button class="about-nav" id="aboutNav" type="button">
+            <span class="about-nav-icon" aria-hidden="true">👤</span>
+            <div class="about-nav-text">
+                <div class="about-nav-title">Sobre mim</div>
+                <div class="about-nav-sub">Conheça meu trabalho</div>
+            </div>
+        </button>
 
         <div class="section-label">Projetos</div>
         <ul class="project-nav" id="projectNav"></ul>
@@ -612,7 +864,7 @@
     </aside>
 
     <main class="main-content">
-        <div class="project-title-bar">
+        <div class="project-title-bar" id="titleBar" hidden>
             <div class="title-row">
                 <div class="title-info">
                     <h1 id="projectTitle" aria-live="polite">Selecione um projeto</h1>
@@ -627,7 +879,7 @@
             </div>
         </div>
 
-        <div class="project-body">
+        <div class="project-body" id="projectBody" hidden>
             <div class="tabs" id="tabs" role="tablist"></div>
             <div class="tab-panels" id="tabPanels">
                 <div class="tab-panel active" data-panel="details" id="detailsPanel"></div>
@@ -640,15 +892,76 @@
                 </div>
             </div>
         </div>
+
+        <!-- ===== PAINEL SOBRE MIM ===== -->
+        <!-- ✏️ EDITE O CONTEÚDO ABAIXO À VONTADE -->
+        <div class="about-panel" id="aboutPanel">
+            <div class="about-hero">
+                <div class="about-hero-content">
+                    <div class="about-avatar" aria-hidden="true">AB</div>
+                    <div>
+                        <h1 class="about-name">Alberto Bern Jr</h1>
+                        <div class="about-role">Desenvolvedor · Automações & Web</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="about-body">
+                <div class="about-section">
+                    <h3>👋 Quem sou eu</h3>
+                    <p>
+                        Olá! Sou Alberto, desenvolvedor focado em <strong>automações que resolvem problemas reais</strong> — especialmente no setor educacional. Trabalho com Python, JavaScript e Google Apps Script para transformar tarefas manuais repetitivas em fluxos automatizados confiáveis.
+                    </p>
+                    <p>
+                        Meus projetos combinam <strong>web scraping</strong>, <strong>integração com Google Sheets</strong>, <strong>geração automatizada de documentos</strong> e <strong>interfaces web simples</strong>. O objetivo é sempre o mesmo: economizar tempo, reduzir erros humanos e liberar as pessoas para tarefas mais estratégicas.
+                    </p>
+                    <p>
+                        Atualmente desenvolvo soluções para coordenação pedagógica e gestão escolar, sempre com foco em código limpo, rastreabilidade e resultados mensuráveis.
+                    </p>
+                </div>
+
+                <div class="about-section">
+                    <h3>💬 Vamos conversar</h3>
+                    <div class="about-links">
+                        <a class="about-link" href="https://github.com/AlbertoBernJr" target="_blank" rel="noopener noreferrer">
+                            <span class="about-link-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 2.9-.39c.98 0 1.97.13 2.9.39 2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14 0 1.55-.01 2.8-.01 3.18 0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+                            </span>
+                            <span class="about-link-text">
+                                <span class="about-link-label">GitHub</span>
+                                <span class="about-link-value">@AlbertoBernJr</span>
+                            </span>
+                        </a>
+
+                        <a class="about-link" href="https://linkedin.com/in/AlbertoBernJr" target="_blank" rel="noopener noreferrer">
+                            <span class="about-link-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+                            </span>
+                            <span class="about-link-text">
+                                <span class="about-link-label">LinkedIn</span>
+                                <span class="about-link-value">/in/AlbertoBernJr</span>
+                            </span>
+                        </a>
+
+                        <a class="about-link" href="mailto:seu@email.com">
+                            <span class="about-link-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+                            </span>
+                            <span class="about-link-text">
+                                <span class="about-link-label">Email</span>
+                                <span class="about-link-value">seu@email.com</span>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <script>
         // =============================================
         // 🗂️ PROJETOS
         // =============================================
-        // details: string OU array de strings (vários parágrafos)
-        // video:   URL do YouTube/Vimeo ou caminho .mp4
-        // images:  caminhos relativos à pasta do projeto
         const projects = [
             {
                 id: 'marketplace',
@@ -759,6 +1072,11 @@
         const detailsEl  = document.getElementById('detailsPanel');
         const imagesEl   = document.getElementById('imagesPanel');
 
+        const titleBar    = document.getElementById('titleBar');
+        const projectBody = document.getElementById('projectBody');
+        const aboutPanel  = document.getElementById('aboutPanel');
+        const aboutNav    = document.getElementById('aboutNav');
+
         const byId = new Map(projects.map(p => [p.id, p]));
         let current = null;
 
@@ -768,7 +1086,6 @@
             return './' + path + '/';
         }
 
-        // Resolve um caminho relativo (ex: 'fotos/img.png') contra o folder do projeto.
         function imageUrl(p, path) {
             if (/^https?:\/\//i.test(path)) return path;
             const base = p.folder.endsWith('/') ? p.folder : p.folder + '/';
@@ -855,7 +1172,7 @@
             detailsEl.append(div);
         }
 
-        // ===== IMAGENS (carrossel) =====
+        // ===== IMAGENS =====
         function renderImagesTab(p) {
             imagesEl.innerHTML = '';
             if (!p.images || !p.images.length) {
@@ -941,7 +1258,6 @@
         // ===== ABAS =====
         function renderTabs(p) {
             tabsEl.innerHTML = '';
-            // Ordem: Detalhes → Vídeo → Imagens
             const defs = [
                 { key: 'details', label: 'Detalhes', enabled: true },
                 { key: 'video',   label: 'Vídeo',    enabled: !!p.video },
@@ -968,9 +1284,27 @@
             }
         }
 
-        // ===== CARREGAR PROJETO =====
+        // ===== NAVEGAÇÃO ENTRE VIEWS =====
+        function showAbout() {
+            current = null;
+            aboutPanel.hidden = false;
+            titleBar.hidden = true;
+            projectBody.hidden = true;
+            aboutNav.classList.add('active');
+            for (const btn of nav.querySelectorAll('button')) {
+                btn.classList.remove('active');
+                btn.removeAttribute('aria-current');
+            }
+            history.replaceState(null, '', '#about');
+        }
+
         function loadProject(p) {
             current = p;
+            aboutPanel.hidden = true;
+            titleBar.hidden = false;
+            projectBody.hidden = false;
+            aboutNav.classList.remove('active');
+
             titleEl.textContent = p.name;
             descEl.textContent = p.description;
             openBtn.href = urlOf(p);
@@ -984,6 +1318,7 @@
 
             switchTab('details');
             setActive(p.id);
+            history.replaceState(null, '', '#' + p.id);
         }
 
         function setActive(id) {
@@ -1039,11 +1374,7 @@
                     btn.append(tags);
                 }
 
-                btn.addEventListener('click', () => {
-                    history.replaceState(null, '', '#' + p.id);
-                    loadProject(p);
-                });
-
+                btn.addEventListener('click', () => loadProject(p));
                 li.append(btn);
                 frag.append(li);
             }
@@ -1052,12 +1383,16 @@
 
         // ===== INIT =====
         renderNav();
-        if (projects.length) {
-            const hash = location.hash.replace(/^#/, '');
-            loadProject(byId.get(hash) || projects[0]);
+
+        aboutNav.addEventListener('click', showAbout);
+
+        const hash = location.hash.replace(/^#/, '');
+        if (hash === 'about' || !hash) {
+            showAbout();
+        } else if (byId.has(hash)) {
+            loadProject(byId.get(hash));
         } else {
-            document.querySelectorAll('.tab-panel').forEach(el => el.classList.remove('active'));
-            empty.hidden = false;
+            showAbout();
         }
     </script>
 </body>
