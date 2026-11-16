@@ -44,7 +44,6 @@
             position: relative;
         }
 
-        /* Fundo com gradientes suaves */
         body::before {
             content: '';
             position: fixed;
@@ -112,7 +111,7 @@
         }
         .project-nav li { position: relative; }
 
-        .project-nav button, .project-nav a {
+        .project-nav button {
             display: block; width: 100%;
             text-align: left;
             padding: 12px 14px;
@@ -123,10 +122,9 @@
             cursor: pointer;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative; overflow: hidden;
-            text-decoration: none;
         }
 
-        .project-nav button::before, .project-nav a::before {
+        .project-nav button::before {
             content: '';
             position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
             background: var(--accent);
@@ -134,25 +132,25 @@
             transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .project-nav button:hover, .project-nav a:hover {
+        .project-nav button:hover {
             background: rgba(51, 65, 85, 0.7);
             border-color: var(--border-strong);
             transform: translateY(-1px);
             box-shadow: var(--shadow-md);
         }
 
-        .project-nav button:hover::before, .project-nav a:hover::before,
-        .project-nav button.active::before, .project-nav a.active::before {
+        .project-nav button:hover::before,
+        .project-nav button.active::before {
             transform: scaleY(1);
         }
 
-        .project-nav button.active, .project-nav a.active {
+        .project-nav button.active {
             background: linear-gradient(135deg, rgba(56,189,248,0.12), rgba(129,140,248,0.08));
             border-color: rgba(56,189,248,0.35);
             box-shadow: var(--shadow-glow);
         }
 
-        .project-nav button:focus-visible, .project-nav a:focus-visible {
+        .project-nav button:focus-visible {
             outline: 2px solid var(--accent); outline-offset: 2px;
         }
 
@@ -171,9 +169,7 @@
             font-size: 0.88rem; font-weight: 600;
             letter-spacing: -0.01em; line-height: 1.3;
         }
-        .project-nav button.active .project-name, .project-nav a.active .project-name {
-            color: var(--accent);
-        }
+        .project-nav button.active .project-name { color: var(--accent); }
 
         .project-desc {
             display: block; font-size: 0.75rem;
@@ -264,22 +260,85 @@
         }
         .btn svg { width: 14px; height: 14px; }
 
-        .preview-frame {
-            flex: 1; border: 1px solid var(--border);
-            border-radius: var(--radius-lg); overflow: hidden;
-            background: #fff; min-height: 0; position: relative;
+        /* ===== CORPO COM ABAS ===== */
+        .project-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             box-shadow: var(--shadow-md);
-        }
-        .preview-frame iframe {
-            width: 100%; height: 100%; border: none; display: block;
+            position: relative;
         }
 
+        .tabs {
+            display: flex;
+            gap: 2px;
+            padding: 8px 8px 0;
+            border-bottom: 1px solid var(--border);
+            background: rgba(11, 17, 32, 0.4);
+            flex-shrink: 0;
+        }
+
+        .tab {
+            padding: 10px 18px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            transition: color 0.2s, background 0.2s;
+        }
+        .tab:hover { color: var(--text); background: rgba(51, 65, 85, 0.4); }
+        .tab.active {
+            color: var(--accent);
+            background: rgba(56, 189, 248, 0.08);
+        }
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px; left: 0; right: 0;
+            height: 2px;
+            background: var(--accent);
+            border-radius: 2px 2px 0 0;
+        }
+
+        .tab-panels {
+            flex: 1;
+            position: relative;
+            min-height: 0;
+            background: #fff;
+        }
+
+        .tab-panel {
+            position: absolute;
+            inset: 0;
+            display: none;
+            overflow: auto;
+        }
+        .tab-panel.active { display: block; }
+
+        .tab-panel iframe {
+            width: 100%; height: 100%;
+            border: none; display: block;
+        }
+
+        /* Carregamento */
         .loader {
             position: absolute; inset: 0;
             display: grid; place-items: center;
             background: rgba(11, 17, 32, 0.7);
             backdrop-filter: blur(4px);
-            z-index: 2; transition: opacity 0.3s;
+            z-index: 2;
         }
         .loader[hidden] { display: none; }
 
@@ -291,6 +350,7 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
+        /* Estado vazio */
         .empty-state {
             position: absolute; inset: 0;
             display: grid; place-content: center; text-align: center;
@@ -303,6 +363,73 @@
         }
         .empty-state h3 { color: var(--text); font-size: 1.1rem; margin-bottom: 6px; }
         .empty-state p { font-size: 0.88rem; }
+
+        /* ===== ABA VÍDEO ===== */
+        .video-wrap {
+            width: 100%; height: 100%;
+            display: grid;
+            place-items: center;
+            background: #000;
+            padding: 20px;
+        }
+        .video-wrap iframe,
+        .video-wrap video {
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            border: none;
+            border-radius: 8px;
+            background: #000;
+        }
+
+        /* ===== ABA DETALHES ===== */
+        .details-panel {
+            padding: 28px 32px;
+            color: var(--text);
+            background: var(--bg-soft);
+            height: 100%;
+            overflow-y: auto;
+        }
+        .details-panel h3 {
+            color: var(--accent);
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0 0 12px;
+            letter-spacing: -0.01em;
+        }
+        .details-panel h3:not(:first-child) { margin-top: 24px; }
+        .details-panel p {
+            color: var(--text-muted);
+            line-height: 1.65;
+            font-size: 0.92rem;
+        }
+        .details-panel ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .details-panel li {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            padding-left: 22px;
+            position: relative;
+        }
+        .details-panel li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: 700;
+        }
+        .details-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
 
         /* ===== RESPONSIVO ===== */
         @media (max-width: 900px) {
@@ -323,18 +450,18 @@
                 flex-direction: row; overflow-x: auto; gap: 8px; padding-bottom: 4px;
             }
             .project-nav li { flex: 0 0 auto; }
-            .project-nav button, .project-nav a {
+            .project-nav button {
                 white-space: nowrap; padding: 10px 12px; min-width: 160px;
             }
-            .project-nav button::before, .project-nav a::before {
+            .project-nav button::before {
                 width: 100%; height: 2px; top: auto; bottom: 0;
                 transform: scaleX(0);
             }
-            .project-nav button:hover::before, .project-nav a:hover::before,
-            .project-nav button.active::before, .project-nav a.active::before {
+            .project-nav button:hover::before,
+            .project-nav button.active::before {
                 transform: scaleX(1);
             }
-            .project-nav button:hover, .project-nav a:hover { transform: none; }
+            .project-nav button:hover { transform: none; }
 
             .project-desc, .project-tags, .sidebar-footer { display: none; }
 
@@ -345,6 +472,9 @@
             .project-title-bar p { font-size: 0.82rem; }
             .title-actions { width: 100%; }
             .btn { flex: 1; justify-content: center; }
+
+            .details-panel { padding: 20px; }
+            .tab { padding: 10px 14px; font-size: 0.8rem; }
         }
         @media (max-width: 480px) {
             .brand-role { display: none; }
@@ -354,9 +484,9 @@
 <body>
     <aside class="sidebar">
         <div class="brand">
-            <div class="avatar" aria-hidden="true">JS</div>
+            <div class="avatar" aria-hidden="true">AB</div>
             <div class="brand-info">
-                <div class="brand-name">Seu Nome</div>
+                <div class="brand-name">Alberto Bern Jr</div>
                 <div class="brand-role">Dev · Automações & Web</div>
             </div>
         </div>
@@ -365,10 +495,10 @@
         <ul class="project-nav" id="projectNav"></ul>
 
         <div class="sidebar-footer">
-            <a class="social-link" href="https://github.com/seu-usuario" target="_blank" rel="noopener" aria-label="GitHub">
+            <a class="social-link" href="https://github.com/AlbertoBernJr" target="_blank" rel="noopener" aria-label="GitHub">
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 2.9-.39c.98 0 1.97.13 2.9.39 2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14 0 1.55-.01 2.8-.01 3.18 0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
             </a>
-            <a class="social-link" href="https://linkedin.com/in/seu-usuario" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <a class="social-link" href="https://linkedin.com/in/AlbertoBernJr" target="_blank" rel="noopener" aria-label="LinkedIn">
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
             </a>
             <a class="social-link" href="mailto:seu@email.com" aria-label="Email">
@@ -393,22 +523,32 @@
             </div>
         </div>
 
-        <div class="preview-frame">
-            <div class="loader" id="loader" hidden><span class="spinner"></span></div>
-            <div class="empty-state" id="emptyState">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 8h20"/><circle cx="5.5" cy="6" r=".5" fill="currentColor"/><circle cx="7.5" cy="6" r=".5" fill="currentColor"/></svg>
-                <h3>Prévia do projeto</h3>
-                <p>Selecione um projeto na barra lateral para começar.</p>
+        <div class="project-body">
+            <div class="tabs" id="tabs" role="tablist"></div>
+            <div class="tab-panels" id="tabPanels">
+                <div class="tab-panel active" data-panel="preview">
+                    <div class="loader" id="loader" hidden><span class="spinner"></span></div>
+                    <div class="empty-state" id="emptyState">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 8h20"/><circle cx="5.5" cy="6" r=".5" fill="currentColor"/><circle cx="7.5" cy="6" r=".5" fill="currentColor"/></svg>
+                        <h3>Prévia do projeto</h3>
+                        <p>Selecione um projeto na barra lateral para começar.</p>
+                    </div>
+                    <iframe id="previewIframe" title="Prévia do projeto" src="about:blank"></iframe>
+                </div>
+                <div class="tab-panel" data-panel="video" id="videoPanel"></div>
+                <div class="tab-panel" data-panel="details" id="detailsPanel"></div>
             </div>
-            <iframe id="previewIframe" title="Prévia do projeto" src="about:blank"></iframe>
         </div>
     </main>
 
     <script>
         // =============================================
-        // 🗂️ PROJETOS — URLs apontando para o GCP-GAS
+        // 🗂️ PROJETOS
         // =============================================
-        // Campos opcionais: icon (emoji), tech (array), repo (URL)
+        // video:      URL do YouTube/Vimeo ou caminho .mp4
+        // details:    texto longo "Sobre o projeto"
+        // highlights: lista de destaques
+        // repo:       URL do repositório
         const projects = [
             {
                 id: 'marketplace',
@@ -416,7 +556,17 @@
                 description: 'Automação híbrida (Python + JavaScript) para identificação de produtos.',
                 folder: 'https://albertobernjr.github.io/GCP-GAS/IIDENTIFICACAO_MARKETPLACE/',
                 icon: '🛒',
-                tech: ['Python', 'JavaScript']
+                tech: ['Python', 'Selenium', 'Sheets API', 'Pandas', 'Excel'],
+                video: 'https://www.youtube.com/embed/7RBh3g-gvWY',
+                details: 'Sistema híbrido (Python + JavaScript) que automatiza a identificação e classificação de produtos em marketplaces. Combina web scraping, APIs do Google Sheets e interface web para dashboards em tempo real.',
+                highlights: [
+                    'Utilização do Selenium para coleta automática de dados das vendas',
+                    'Integração com Google Sheets',
+                    'Classificação por similaridade textual',
+                    'Adição do relatório de vendas na planilha Google',
+                    'JavaScript realiza toda a lógica de comparação e identificação dos compradores'
+                ],
+                repo: 'https://github.com/AlbertoBernJr/GCP-GAS/tree/main/IIDENTIFICACAO_MARKETPLACE'
             },
             {
                 id: 'appscript-faltas',
@@ -424,7 +574,11 @@
                 description: 'Automação sobre o registro de faltas dos alunos.',
                 folder: 'https://albertobernjr.github.io/GCP-GAS/WEB APP SCRIPT - LANCAMENTO FALTA DOS ALUNOS/',
                 icon: '📋',
-                tech: ['Apps Script']
+                tech: ['Apps Script'],
+                video: '',
+                details: '',
+                highlights: [],
+                repo: ''
             },
             {
                 id: 'cartoes-avaliacao',
@@ -432,7 +586,11 @@
                 description: 'Sistema automatizado para geração de cartões de avaliação nominal.',
                 folder: 'https://albertobernjr.github.io/GCP-GAS/CRIACAO CARTOES AVALICAO NOMINAL/',
                 icon: '🎴',
-                tech: ['Automação']
+                tech: ['Automação'],
+                video: '',
+                details: '',
+                highlights: [],
+                repo: ''
             },
             {
                 id: 'acompanhar-atualizacao',
@@ -440,17 +598,24 @@
                 description: 'Notificação e controle de pendências para documentos educacionais.',
                 folder: 'https://albertobernjr.github.io/GCP-GAS/ACOMPANHAR_ATUALIZACAO_DE_ARQUIVOS/',
                 icon: '🔔',
-                tech: ['Google Sheets']
+                tech: ['Google Sheets'],
+                video: '',
+                details: '',
+                highlights: [],
+                repo: ''
             }
         ];
 
-        const nav     = document.getElementById('projectNav');
-        const iframe  = document.getElementById('previewIframe');
-        const titleEl = document.getElementById('projectTitle');
-        const descEl  = document.getElementById('projectDescription');
-        const openBtn = document.getElementById('openNewTab');
-        const loader  = document.getElementById('loader');
-        const empty   = document.getElementById('emptyState');
+        const nav        = document.getElementById('projectNav');
+        const iframe     = document.getElementById('previewIframe');
+        const titleEl    = document.getElementById('projectTitle');
+        const descEl     = document.getElementById('projectDescription');
+        const openBtn    = document.getElementById('openNewTab');
+        const loader     = document.getElementById('loader');
+        const empty      = document.getElementById('emptyState');
+        const tabsEl     = document.getElementById('tabs');
+        const videoPanel = document.getElementById('videoPanel');
+        const detailsEl  = document.getElementById('detailsPanel');
 
         const byId = new Map(projects.map(p => [p.id, p]));
         let current = null;
@@ -461,6 +626,137 @@
             return './' + path + '/';
         }
 
+        // ===== VÍDEO =====
+        function videoEmbed(url) {
+            if (!url) return null;
+            const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/);
+            if (yt) return { type: 'iframe', src: 'https://www.youtube.com/embed/' + yt[1] };
+            const vm = url.match(/vimeo\.com\/(\d+)/);
+            if (vm) return { type: 'iframe', src: 'https://player.vimeo.com/video/' + vm[1] };
+            return { type: 'video', src: url };
+        }
+
+        function renderVideoTab(p) {
+            videoPanel.innerHTML = '';
+            const v = videoEmbed(p.video);
+            if (!v) {
+                videoPanel.innerHTML = '<div class="empty-state"><div><h3>Sem vídeo cadastrado</h3><p>Este projeto ainda não tem um vídeo de demonstração.</p></div></div>';
+                return;
+            }
+            const wrap = document.createElement('div');
+            wrap.className = 'video-wrap';
+            const el = document.createElement(v.type === 'iframe' ? 'iframe' : 'video');
+            el.src = v.src;
+            if (v.type === 'iframe') {
+                el.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                el.allowFullscreen = true;
+                el.title = 'Vídeo do projeto';
+            } else {
+                el.controls = true;
+                el.preload = 'metadata';
+            }
+            wrap.append(el);
+            videoPanel.append(wrap);
+        }
+
+        // ===== DETALHES =====
+        function renderDetailsTab(p) {
+            detailsEl.innerHTML = '';
+            const has = p.details || (p.highlights && p.highlights.length) || p.repo;
+            if (!has) {
+                detailsEl.innerHTML = '<div class="empty-state"><div><h3>Sem detalhes cadastrados</h3><p>Este projeto ainda não tem informações adicionais.</p></div></div>';
+                return;
+            }
+            const div = document.createElement('div');
+            div.className = 'details-panel';
+
+            if (p.details) {
+                const h = document.createElement('h3'); h.textContent = 'Sobre o projeto';
+                const para = document.createElement('p'); para.textContent = p.details;
+                div.append(h, para);
+            }
+            if (p.highlights && p.highlights.length) {
+                const h = document.createElement('h3'); h.textContent = 'Funcionalidades principais';
+                const ul = document.createElement('ul');
+                for (const item of p.highlights) {
+                    const li = document.createElement('li'); li.textContent = item; ul.append(li);
+                }
+                div.append(h, ul);
+            }
+            if (p.repo) {
+                const h = document.createElement('h3'); h.textContent = 'Links';
+                const links = document.createElement('div'); links.className = 'details-links';
+                const a = document.createElement('a');
+                a.className = 'btn'; a.href = p.repo; a.target = '_blank'; a.rel = 'noopener';
+                a.textContent = '📁 Ver código no GitHub';
+                links.append(a);
+                div.append(h, links);
+            }
+            detailsEl.append(div);
+        }
+
+        // ===== ABAS =====
+        function renderTabs(p) {
+            tabsEl.innerHTML = '';
+            const defs = [
+                { key: 'preview', label: 'Prévia',    enabled: true },
+                { key: 'video',   label: 'Vídeo',     enabled: !!p.video },
+                { key: 'details', label: 'Detalhes',  enabled: !!(p.details || (p.highlights && p.highlights.length) || p.repo) }
+            ].filter(d => d.enabled);
+
+            for (const d of defs) {
+                const btn = document.createElement('button');
+                btn.className = 'tab' + (d.key === 'preview' ? ' active' : '');
+                btn.textContent = d.label;
+                btn.dataset.tab = d.key;
+                btn.setAttribute('role', 'tab');
+                btn.addEventListener('click', () => switchTab(d.key));
+                tabsEl.append(btn);
+            }
+        }
+
+        function switchTab(key) {
+            for (const t of tabsEl.querySelectorAll('.tab')) {
+                t.classList.toggle('active', t.dataset.tab === key);
+            }
+            for (const panel of document.querySelectorAll('.tab-panel')) {
+                panel.classList.toggle('active', panel.dataset.panel === key);
+            }
+        }
+
+        // ===== CARREGAR PROJETO =====
+        function loadProject(p) {
+            current = p;
+            titleEl.textContent = p.name;
+            descEl.textContent = p.description;
+            openBtn.href = urlOf(p);
+            openBtn.hidden = false;
+            empty.hidden = true;
+            loader.hidden = false;
+
+            renderTabs(p);
+            renderVideoTab(p);
+            renderDetailsTab(p);
+
+            iframe.src = urlOf(p);
+            switchTab('preview');
+            setActive(p.id);
+        }
+
+        function setActive(id) {
+            for (const btn of nav.querySelectorAll('button')) {
+                const on = btn.dataset.id === id;
+                btn.classList.toggle('active', on);
+                if (on) btn.setAttribute('aria-current', 'true');
+                else btn.removeAttribute('aria-current');
+            }
+        }
+
+        iframe.addEventListener('load', () => {
+            if (current) loader.hidden = true;
+        });
+
+        // ===== SIDEBAR =====
         function renderNav() {
             const frag = document.createDocumentFragment();
 
@@ -515,32 +811,7 @@
             nav.append(frag);
         }
 
-        function setActive(id) {
-            for (const btn of nav.querySelectorAll('button')) {
-                const on = btn.dataset.id === id;
-                btn.classList.toggle('active', on);
-                if (on) btn.setAttribute('aria-current', 'true');
-                else btn.removeAttribute('aria-current');
-            }
-        }
-
-        function loadProject(p) {
-            current = p;
-            titleEl.textContent = p.name;
-            descEl.textContent = p.description;
-            openBtn.href = urlOf(p);
-            openBtn.hidden = false;
-            empty.hidden = true;
-            loader.hidden = false;
-            setActive(p.id);
-            iframe.src = urlOf(p);
-        }
-
-        iframe.addEventListener('load', () => {
-            if (!current) return;
-            loader.hidden = true;
-        });
-
+        // ===== INIT =====
         renderNav();
         if (projects.length) {
             const hash = location.hash.replace(/^#/, '');
