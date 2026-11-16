@@ -326,6 +326,7 @@
             overflow: auto;
         }
         .tab-panel.active { display: block; }
+        .tab-panel[data-panel="images"] { overflow: hidden; }
 
         /* ===== ABA VÍDEO ===== */
         .video-wrap {
@@ -393,6 +394,119 @@
             margin-top: 8px;
         }
 
+        /* ===== ABA IMAGENS (carrossel) ===== */
+        .gallery {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #050810;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .gallery-slides {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gallery-slide {
+            min-width: 100%;
+            height: 100%;
+            display: grid;
+            place-items: center;
+            padding: 48px;
+        }
+
+        .gallery-slide img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            background: #fff;
+        }
+
+        .gallery-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid var(--border-strong);
+            color: var(--text);
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            font-size: 1.2rem;
+            transition: all 0.2s;
+            z-index: 2;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        .gallery-btn:hover {
+            background: var(--accent);
+            color: #0b1120;
+            border-color: var(--accent);
+            transform: translateY(-50%) scale(1.05);
+        }
+        .gallery-btn.prev { left: 16px; }
+        .gallery-btn.next { right: 16px; }
+
+        .gallery-indicators {
+            position: absolute;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            padding: 8px 12px;
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 2;
+        }
+
+        .gallery-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(148, 163, 184, 0.4);
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s;
+            padding: 0;
+        }
+        .gallery-indicator:hover { background: rgba(148, 163, 184, 0.7); }
+        .gallery-indicator.active {
+            background: var(--accent);
+            width: 22px;
+            border-radius: 4px;
+        }
+
+        .gallery-counter {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 6px 12px;
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 2;
+        }
+
         /* ===== ESTADO VAZIO ===== */
         .empty-state {
             position: absolute;
@@ -406,6 +520,7 @@
             z-index: 3;
         }
         .empty-state[hidden] { display: none; }
+        .empty-state.inline { position: static; min-height: 100%; }
         .empty-state svg {
             width: 48px; height: 48px; margin: 0 auto 16px;
             color: var(--text-dim); opacity: 0.5;
@@ -457,6 +572,12 @@
 
             .details-panel { padding: 20px; }
             .tab { padding: 10px 14px; font-size: 0.8rem; }
+
+            .gallery-slide { padding: 24px 12px; }
+            .gallery-btn { width: 36px; height: 36px; font-size: 1rem; }
+            .gallery-btn.prev { left: 8px; }
+            .gallery-btn.next { right: 8px; }
+            .gallery-counter { top: 10px; right: 10px; font-size: 0.7rem; padding: 4px 10px; }
         }
         @media (max-width: 480px) {
             .brand-role { display: none; }
@@ -510,6 +631,7 @@
             <div class="tab-panels" id="tabPanels">
                 <div class="tab-panel active" data-panel="details" id="detailsPanel"></div>
                 <div class="tab-panel" data-panel="video" id="videoPanel"></div>
+                <div class="tab-panel" data-panel="images" id="imagesPanel"></div>
                 <div class="empty-state" id="emptyState">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 8h20"/><circle cx="5.5" cy="6" r=".5" fill="currentColor"/><circle cx="7.5" cy="6" r=".5" fill="currentColor"/></svg>
                     <h3>Selecione um projeto</h3>
@@ -523,6 +645,8 @@
         // =============================================
         // 🗂️ PROJETOS
         // =============================================
+        // images: array de caminhos relativos à pasta do projeto
+        //         ex: 'fotos/01_...png'  → resolvido contra o folder
         const projects = [
             {
                 id: 'marketplace',
@@ -540,7 +664,8 @@
                     'Adição do relatório de vendas na planilha Google',
                     'JavaScript realiza toda a lógica de comparação e identificação dos compradores'
                 ],
-                repo: 'https://github.com/AlbertoBernJr/GCP-GAS/tree/main/IIDENTIFICACAO_MARKETPLACE'
+                repo: 'https://github.com/AlbertoBernJr/GCP-GAS/tree/main/IIDENTIFICACAO_MARKETPLACE',
+                images: []
             },
             {
                 id: 'appscript-faltas',
@@ -559,7 +684,17 @@
                     'Atualização automática da planilha',
                     'Contador de faltas por aluno'
                 ],
-                repo: 'https://github.com/AlbertoBernJr/GCP-GAS/tree/main/WEB APP SCRIPT - LANCAMENTO FALTA DOS ALUNOS'
+                repo: 'https://github.com/AlbertoBernJr/GCP-GAS/tree/main/WEB APP SCRIPT - LANCAMENTO FALTA DOS ALUNOS',
+                images: [
+                    'fotos/01_Verificacao_permissao_google.png',
+                    'fotos/02_escolha_acesso.png',
+                    'fotos/03_interface_inicial_app.png',
+                    'fotos/04_utilizando_filtros.png',
+                    'fotos/05_selecao_alunos_faltosos.png',
+                    'fotos/06_planilha_antes_da_gravacao_das_faltas.png',
+                    'fotos/07_planilha_depois_da_gravacao_faltas.png',
+                    'fotos/08_contador_faltas_por_aluno.png'
+                ]
             },
             {
                 id: 'cartoes-avaliacao',
@@ -577,7 +712,8 @@
                     'Exportação para PDF',
                     'Interface simples para configuração'
                 ],
-                repo: 'https://github.com/AlbertoBernJr/GCP-GAS/tree/main/CRIACAO CARTOES AVALICAO NOMINAL'
+                repo: 'https://github.com/AlbertoBernJr/GCP-GAS/tree/main/CRIACAO CARTOES AVALICAO NOMINAL',
+                images: []
             },
             {
                 id: 'acompanhar-atualizacao',
@@ -595,7 +731,8 @@
                     'Envio de e-mail com detalhes da edição',
                     'Proteção contra concorrência e recursividade'
                 ],
-                repo: 'https://github.com/AlbertoBernJr/GCP-GAS/tree/main/ACOMPANHAR_ATUALIZACAO_DE_ARQUIVOS'
+                repo: 'https://github.com/AlbertoBernJr/GCP-GAS/tree/main/ACOMPANHAR_ATUALIZACAO_DE_ARQUIVOS',
+                images: []
             }
         ];
 
@@ -607,6 +744,7 @@
         const tabsEl     = document.getElementById('tabs');
         const videoPanel = document.getElementById('videoPanel');
         const detailsEl  = document.getElementById('detailsPanel');
+        const imagesEl   = document.getElementById('imagesPanel');
 
         const byId = new Map(projects.map(p => [p.id, p]));
         let current = null;
@@ -615,6 +753,18 @@
             if (/^https?:\/\//i.test(p.folder)) return p.folder;
             const path = p.folder.split('/').map(encodeURIComponent).join('/');
             return './' + path + '/';
+        }
+
+        // Resolve um caminho relativo (ex: 'fotos/img.png') contra o folder do projeto.
+        // Usa new URL() para encodar espaços e caracteres especiais corretamente.
+        function imageUrl(p, path) {
+            if (/^https?:\/\//i.test(path)) return path;
+            const base = p.folder.endsWith('/') ? p.folder : p.folder + '/';
+            try {
+                return new URL(path, base).href;
+            } catch {
+                return base + path;
+            }
         }
 
         function videoEmbed(url) {
@@ -626,11 +776,12 @@
             return { type: 'video', src: url };
         }
 
+        // ===== VÍDEO =====
         function renderVideoTab(p) {
             videoPanel.innerHTML = '';
             const v = videoEmbed(p.video);
             if (!v) {
-                videoPanel.innerHTML = '<div class="empty-state" style="position:static;min-height:100%;"><div><h3>Sem vídeo cadastrado</h3><p>Este projeto ainda não tem um vídeo de demonstração.</p></div></div>';
+                videoPanel.innerHTML = '<div class="empty-state inline"><div><h3>Sem vídeo cadastrado</h3><p>Este projeto ainda não tem um vídeo de demonstração.</p></div></div>';
                 return;
             }
             const wrap = document.createElement('div');
@@ -649,11 +800,12 @@
             videoPanel.append(wrap);
         }
 
+        // ===== DETALHES =====
         function renderDetailsTab(p) {
             detailsEl.innerHTML = '';
             const has = p.details || (p.highlights && p.highlights.length) || p.repo;
             if (!has) {
-                detailsEl.innerHTML = '<div class="empty-state" style="position:static;min-height:100%;"><div><h3>Sem detalhes cadastrados</h3><p>Este projeto ainda não tem informações adicionais.</p></div></div>';
+                detailsEl.innerHTML = '<div class="empty-state inline"><div><h3>Sem detalhes cadastrados</h3><p>Este projeto ainda não tem informações adicionais.</p></div></div>';
                 return;
             }
             const div = document.createElement('div');
@@ -684,13 +836,98 @@
             detailsEl.append(div);
         }
 
+        // ===== IMAGENS (carrossel) =====
+        function renderImagesTab(p) {
+            imagesEl.innerHTML = '';
+            if (!p.images || !p.images.length) {
+                imagesEl.innerHTML = '<div class="empty-state inline"><div><h3>Sem imagens cadastradas</h3><p>Este projeto ainda não tem screenshots.</p></div></div>';
+                return;
+            }
+
+            const total = p.images.length;
+            let index = 0;
+
+            const gallery = document.createElement('div');
+            gallery.className = 'gallery';
+            gallery.setAttribute('tabindex', '0');
+            gallery.setAttribute('aria-label', 'Galeria de screenshots');
+
+            const slides = document.createElement('div');
+            slides.className = 'gallery-slides';
+
+            p.images.forEach((path, i) => {
+                const slide = document.createElement('div');
+                slide.className = 'gallery-slide';
+                const img = document.createElement('img');
+                img.src = imageUrl(p, path);
+                img.alt = `Screenshot ${i + 1} de ${total}`;
+                img.loading = i === 0 ? 'eager' : 'lazy';
+                slide.appendChild(img);
+                slides.appendChild(slide);
+            });
+
+            const btnPrev = document.createElement('button');
+            btnPrev.className = 'gallery-btn prev';
+            btnPrev.type = 'button';
+            btnPrev.setAttribute('aria-label', 'Imagem anterior');
+            btnPrev.innerHTML = '&#10094;';
+
+            const btnNext = document.createElement('button');
+            btnNext.className = 'gallery-btn next';
+            btnNext.type = 'button';
+            btnNext.setAttribute('aria-label', 'Próxima imagem');
+            btnNext.innerHTML = '&#10095;';
+
+            const indicators = document.createElement('div');
+            indicators.className = 'gallery-indicators';
+            const dots = [];
+            p.images.forEach((_, i) => {
+                const dot = document.createElement('button');
+                dot.type = 'button';
+                dot.className = 'gallery-indicator' + (i === 0 ? ' active' : '');
+                dot.setAttribute('aria-label', `Ir para imagem ${i + 1}`);
+                dot.addEventListener('click', () => goTo(i));
+                indicators.appendChild(dot);
+                dots.push(dot);
+            });
+
+            const counter = document.createElement('div');
+            counter.className = 'gallery-counter';
+            counter.textContent = `1 / ${total}`;
+
+            function update() {
+                slides.style.transform = `translateX(-${index * 100}%)`;
+                dots.forEach((d, i) => d.classList.toggle('active', i === index));
+                counter.textContent = `${index + 1} / ${total}`;
+            }
+
+            function goTo(i) {
+                index = (i + total) % total;
+                update();
+            }
+
+            btnPrev.addEventListener('click', () => goTo(index - 1));
+            btnNext.addEventListener('click', () => goTo(index + 1));
+
+            gallery.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft')  { e.preventDefault(); goTo(index - 1); }
+                if (e.key === 'ArrowRight') { e.preventDefault(); goTo(index + 1); }
+            });
+
+            gallery.append(slides, btnPrev, btnNext, indicators, counter);
+            imagesEl.appendChild(gallery);
+            update();
+        }
+
+        // ===== ABAS =====
         function renderTabs(p) {
             tabsEl.innerHTML = '';
-            // "Detalhes" é sempre a primeira aba. "Vídeo" só aparece quando o projeto tem vídeo.
+            // Ordem: Detalhes → Vídeo → Imagens
             const defs = [
-                { key: 'details', label: 'Detalhes' },
-                { key: 'video',   label: 'Vídeo',    enabled: !!p.video }
-            ].filter(d => d.enabled !== false);
+                { key: 'details', label: 'Detalhes', enabled: true },
+                { key: 'video',   label: 'Vídeo',    enabled: !!p.video },
+                { key: 'images',  label: 'Imagens',  enabled: !!(p.images && p.images.length) }
+            ].filter(d => d.enabled);
 
             for (const d of defs) {
                 const btn = document.createElement('button');
@@ -712,6 +949,7 @@
             }
         }
 
+        // ===== CARREGAR PROJETO =====
         function loadProject(p) {
             current = p;
             titleEl.textContent = p.name;
@@ -723,8 +961,8 @@
             renderTabs(p);
             renderVideoTab(p);
             renderDetailsTab(p);
+            renderImagesTab(p);
 
-            // "Detalhes" é a aba padrão ao selecionar um cartão
             switchTab('details');
             setActive(p.id);
         }
@@ -738,6 +976,7 @@
             }
         }
 
+        // ===== SIDEBAR =====
         function renderNav() {
             const frag = document.createDocumentFragment();
 
@@ -798,7 +1037,6 @@
             const hash = location.hash.replace(/^#/, '');
             loadProject(byId.get(hash) || projects[0]);
         } else {
-            // Esconde painéis e mostra estado vazio
             document.querySelectorAll('.tab-panel').forEach(el => el.classList.remove('active'));
             empty.hidden = false;
         }
