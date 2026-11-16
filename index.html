@@ -316,7 +316,7 @@
             flex: 1;
             position: relative;
             min-height: 0;
-            background: #fff;
+            background: var(--bg-soft);
         }
 
         .tab-panel {
@@ -327,41 +327,7 @@
         }
         .tab-panel.active { display: block; }
 
-        .tab-panel iframe {
-            width: 100%; height: 100%;
-            border: none; display: block;
-        }
-
-        .loader {
-            position: absolute; inset: 0;
-            display: grid; place-items: center;
-            background: rgba(11, 17, 32, 0.7);
-            backdrop-filter: blur(4px);
-            z-index: 2;
-        }
-        .loader[hidden] { display: none; }
-
-        .spinner {
-            width: 40px; height: 40px; border-radius: 50%;
-            border: 3px solid rgba(56,189,248,0.2);
-            border-top-color: var(--accent);
-            animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        .empty-state {
-            position: absolute; inset: 0;
-            display: grid; place-content: center; text-align: center;
-            padding: 24px; background: var(--bg-soft);
-            color: var(--text-muted); z-index: 3;
-        }
-        .empty-state svg {
-            width: 48px; height: 48px; margin: 0 auto 16px;
-            color: var(--text-dim); opacity: 0.5;
-        }
-        .empty-state h3 { color: var(--text); font-size: 1.1rem; margin-bottom: 6px; }
-        .empty-state p { font-size: 0.88rem; }
-
+        /* ===== ABA VÍDEO ===== */
         .video-wrap {
             width: 100%; height: 100%;
             display: grid;
@@ -378,6 +344,7 @@
             background: #000;
         }
 
+        /* ===== ABA DETALHES ===== */
         .details-panel {
             padding: 28px 32px;
             color: var(--text);
@@ -387,27 +354,64 @@
         }
         .details-panel h3 {
             color: var(--accent);
-            font-size: 1rem; font-weight: 600;
-            margin: 0 0 12px; letter-spacing: -0.01em;
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0 0 12px;
+            letter-spacing: -0.01em;
         }
         .details-panel h3:not(:first-child) { margin-top: 24px; }
         .details-panel p {
-            color: var(--text-muted); line-height: 1.65; font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 1.65;
+            font-size: 0.92rem;
         }
         .details-panel ul {
             list-style: none;
-            display: flex; flex-direction: column;
-            gap: 8px; margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
         }
         .details-panel li {
-            color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;
-            padding-left: 22px; position: relative;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            padding-left: 22px;
+            position: relative;
         }
         .details-panel li::before {
-            content: '▸'; position: absolute; left: 0;
-            color: var(--accent); font-weight: 700;
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: 700;
         }
-        .details-links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+        .details-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        /* ===== ESTADO VAZIO ===== */
+        .empty-state {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-content: center;
+            text-align: center;
+            padding: 24px;
+            background: var(--bg-soft);
+            color: var(--text-muted);
+            z-index: 3;
+        }
+        .empty-state[hidden] { display: none; }
+        .empty-state svg {
+            width: 48px; height: 48px; margin: 0 auto 16px;
+            color: var(--text-dim); opacity: 0.5;
+        }
+        .empty-state h3 { color: var(--text); font-size: 1.1rem; margin-bottom: 6px; }
+        .empty-state p { font-size: 0.88rem; }
 
         /* ===== RESPONSIVO ===== */
         @media (max-width: 900px) {
@@ -490,12 +494,12 @@
             <div class="title-row">
                 <div class="title-info">
                     <h1 id="projectTitle" aria-live="polite">Selecione um projeto</h1>
-                    <p id="projectDescription">Clique em um projeto da lista para visualizar a prévia.</p>
+                    <p id="projectDescription">Clique em um projeto da lista para visualizar os detalhes.</p>
                 </div>
                 <div class="title-actions">
                     <a id="openNewTab" class="btn" href="#" target="_blank" rel="noopener noreferrer" hidden>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M21 14v7H3V3h7"/></svg>
-                        Abrir em nova aba
+                        Abrir projeto em nova aba
                     </a>
                 </div>
             </div>
@@ -504,17 +508,13 @@
         <div class="project-body">
             <div class="tabs" id="tabs" role="tablist"></div>
             <div class="tab-panels" id="tabPanels">
-                <div class="tab-panel active" data-panel="preview">
-                    <div class="loader" id="loader" hidden><span class="spinner"></span></div>
-                    <div class="empty-state" id="emptyState">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 8h20"/><circle cx="5.5" cy="6" r=".5" fill="currentColor"/><circle cx="7.5" cy="6" r=".5" fill="currentColor"/></svg>
-                        <h3>Prévia do projeto</h3>
-                        <p>Selecione um projeto na barra lateral para começar.</p>
-                    </div>
-                    <iframe id="previewIframe" title="Prévia do projeto" src="about:blank"></iframe>
-                </div>
+                <div class="tab-panel active" data-panel="details" id="detailsPanel"></div>
                 <div class="tab-panel" data-panel="video" id="videoPanel"></div>
-                <div class="tab-panel" data-panel="details" id="detailsPanel"></div>
+                <div class="empty-state" id="emptyState">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 8h20"/><circle cx="5.5" cy="6" r=".5" fill="currentColor"/><circle cx="7.5" cy="6" r=".5" fill="currentColor"/></svg>
+                    <h3>Selecione um projeto</h3>
+                    <p>Escolha um projeto na barra lateral para ver os detalhes.</p>
+                </div>
             </div>
         </div>
     </main>
@@ -600,11 +600,9 @@
         ];
 
         const nav        = document.getElementById('projectNav');
-        const iframe     = document.getElementById('previewIframe');
         const titleEl    = document.getElementById('projectTitle');
         const descEl     = document.getElementById('projectDescription');
         const openBtn    = document.getElementById('openNewTab');
-        const loader     = document.getElementById('loader');
         const empty      = document.getElementById('emptyState');
         const tabsEl     = document.getElementById('tabs');
         const videoPanel = document.getElementById('videoPanel');
@@ -632,7 +630,7 @@
             videoPanel.innerHTML = '';
             const v = videoEmbed(p.video);
             if (!v) {
-                videoPanel.innerHTML = '<div class="empty-state"><div><h3>Sem vídeo cadastrado</h3><p>Este projeto ainda não tem um vídeo de demonstração.</p></div></div>';
+                videoPanel.innerHTML = '<div class="empty-state" style="position:static;min-height:100%;"><div><h3>Sem vídeo cadastrado</h3><p>Este projeto ainda não tem um vídeo de demonstração.</p></div></div>';
                 return;
             }
             const wrap = document.createElement('div');
@@ -655,7 +653,7 @@
             detailsEl.innerHTML = '';
             const has = p.details || (p.highlights && p.highlights.length) || p.repo;
             if (!has) {
-                detailsEl.innerHTML = '<div class="empty-state"><div><h3>Sem detalhes cadastrados</h3><p>Este projeto ainda não tem informações adicionais.</p></div></div>';
+                detailsEl.innerHTML = '<div class="empty-state" style="position:static;min-height:100%;"><div><h3>Sem detalhes cadastrados</h3><p>Este projeto ainda não tem informações adicionais.</p></div></div>';
                 return;
             }
             const div = document.createElement('div');
@@ -688,15 +686,15 @@
 
         function renderTabs(p) {
             tabsEl.innerHTML = '';
+            // "Detalhes" é sempre a primeira aba. "Vídeo" só aparece quando o projeto tem vídeo.
             const defs = [
-                { key: 'preview', label: 'Prévia',    enabled: true },
-                { key: 'video',   label: 'Vídeo',     enabled: !!p.video },
-                { key: 'details', label: 'Detalhes',  enabled: !!(p.details || (p.highlights && p.highlights.length) || p.repo) }
-            ].filter(d => d.enabled);
+                { key: 'details', label: 'Detalhes' },
+                { key: 'video',   label: 'Vídeo',    enabled: !!p.video }
+            ].filter(d => d.enabled !== false);
 
             for (const d of defs) {
                 const btn = document.createElement('button');
-                btn.className = 'tab' + (d.key === 'preview' ? ' active' : '');
+                btn.className = 'tab' + (d.key === 'details' ? ' active' : '');
                 btn.textContent = d.label;
                 btn.dataset.tab = d.key;
                 btn.setAttribute('role', 'tab');
@@ -721,14 +719,13 @@
             openBtn.href = urlOf(p);
             openBtn.hidden = false;
             empty.hidden = true;
-            loader.hidden = false;
 
             renderTabs(p);
             renderVideoTab(p);
             renderDetailsTab(p);
 
-            iframe.src = urlOf(p);
-            switchTab('preview');
+            // "Detalhes" é a aba padrão ao selecionar um cartão
+            switchTab('details');
             setActive(p.id);
         }
 
@@ -740,10 +737,6 @@
                 else btn.removeAttribute('aria-current');
             }
         }
-
-        iframe.addEventListener('load', () => {
-            if (current) loader.hidden = true;
-        });
 
         function renderNav() {
             const frag = document.createDocumentFragment();
@@ -799,13 +792,15 @@
             nav.append(frag);
         }
 
+        // ===== INIT =====
         renderNav();
         if (projects.length) {
             const hash = location.hash.replace(/^#/, '');
             loadProject(byId.get(hash) || projects[0]);
         } else {
+            // Esconde painéis e mostra estado vazio
+            document.querySelectorAll('.tab-panel').forEach(el => el.classList.remove('active'));
             empty.hidden = false;
-            loader.hidden = true;
         }
     </script>
 </body>
