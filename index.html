@@ -366,6 +366,7 @@
             line-height: 1.65;
             font-size: 0.92rem;
         }
+        .details-panel p + p { margin-top: 12px; }
         .details-panel ul {
             list-style: none;
             display: flex;
@@ -645,8 +646,9 @@
         // =============================================
         // 🗂️ PROJETOS
         // =============================================
-        // images: array de caminhos relativos à pasta do projeto
-        //         ex: 'fotos/01_...png'  → resolvido contra o folder
+        // details: string OU array de strings (vários parágrafos)
+        // video:   URL do YouTube/Vimeo ou caminho .mp4
+        // images:  caminhos relativos à pasta do projeto
         const projects = [
             {
                 id: 'marketplace',
@@ -721,18 +723,29 @@
                 description: 'Sistema de notificação e controle de pendências para documentos educacionais.',
                 folder: 'https://albertobernjr.github.io/GCP-GAS/ACOMPANHAR_ATUALIZACAO_DE_ARQUIVOS/',
                 icon: '🔔',
-                tech: ['Google Sheets', 'Apps Script', 'Gmail API'],
+                tech: ['Google Sheets', 'Apps Script', 'Gmail API', 'LockService', 'PropertiesService'],
                 video: '',
-                details: 'Automação desenvolvida em Google Apps Script para monitorar edições em uma planilha compartilhada, usada pela coordenação pedagógica para registrar documentos de desempenho de alunos. O script detecta alterações na coluna de arquivos, gera notificações por e-mail e mantém um controle visual de pendências por meio de checkboxes e cores nas abas.',
+                details: [
+                    'Automação desenvolvida em Google Apps Script para monitorar edições em uma planilha compartilhada, usada pela coordenação pedagógica para registrar documentos de desempenho de alunos. O script detecta alterações na coluna de arquivos, gera notificações por e-mail e mantém um controle visual de pendências por meio de checkboxes e cores nas abas.',
+                    'Desafio técnico: evitar execuções duplicadas causadas pela recursividade do gatilho (o próprio script escreve na planilha). A solução combinou LockService para serializar execuções e uma flag em PropertiesService para impedir reentrada.',
+                    'Resultado: economia de aproximadamente 40 minutos por dia em verificações manuais, processando em média 7 atualizações por semana com notificações automáticas e rastreabilidade completa.'
+                ],
                 highlights: [
-                    'Detecção automática de edições na planilha',
+                    'Detecção automática de edições na coluna E',
                     'Registro de data/hora da última modificação',
                     'Criação de checkbox para controle de conferência',
-                    'Envio de e-mail com detalhes da edição',
-                    'Proteção contra concorrência e recursividade'
+                    'Mudança de cor da aba para indicar pendências',
+                    'Envio de e-mail com detalhes da edição (usuário, link, valor)',
+                    'Proteção contra concorrência e recursividade (LockService + PropertiesService)',
+                    'Gatilho instalável com credenciais de administrador'
                 ],
                 repo: 'https://github.com/AlbertoBernJr/GCP-GAS/tree/main/ACOMPANHAR_ATUALIZACAO_DE_ARQUIVOS',
-                images: []
+                images: [
+                    'Fotos/01.png',
+                    'Fotos/02.1.png',
+                    'Fotos/02.2.png',
+                    'Fotos/03.png'
+                ]
             }
         ];
 
@@ -756,7 +769,6 @@
         }
 
         // Resolve um caminho relativo (ex: 'fotos/img.png') contra o folder do projeto.
-        // Usa new URL() para encodar espaços e caracteres especiais corretamente.
         function imageUrl(p, path) {
             if (/^https?:\/\//i.test(path)) return path;
             const base = p.folder.endsWith('/') ? p.folder : p.folder + '/';
@@ -812,9 +824,16 @@
             div.className = 'details-panel';
 
             if (p.details) {
-                const h = document.createElement('h3'); h.textContent = 'Sobre o projeto';
-                const para = document.createElement('p'); para.textContent = p.details;
-                div.append(h, para);
+                const h = document.createElement('h3');
+                h.textContent = 'Sobre o projeto';
+                div.append(h);
+
+                const paragraphs = Array.isArray(p.details) ? p.details : [p.details];
+                for (const text of paragraphs) {
+                    const para = document.createElement('p');
+                    para.textContent = text;
+                    div.append(para);
+                }
             }
             if (p.highlights && p.highlights.length) {
                 const h = document.createElement('h3'); h.textContent = 'Funcionalidades principais';
